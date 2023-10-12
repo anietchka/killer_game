@@ -13,4 +13,9 @@ class Player < ApplicationRecord
   validates :status, presence: true, inclusion: { in: STATUS }
   validates :name, presence: true
   validates :player_code, uniqueness: true, presence: false
+
+  def generate_player_code
+    self.player_code = "#{self.game_id}#{self.id}#{rand(10)}".to_i
+    self.save
+  end
 end
