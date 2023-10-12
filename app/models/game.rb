@@ -1,5 +1,6 @@
 class Game < ApplicationRecord
   belongs_to :user
+  has_many :players, dependent: :destroy
   INITIALIZED = "initialized"
   STARTED = "started"
   FINISH = "finish"
