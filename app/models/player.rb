@@ -1,6 +1,7 @@
 class Player < ApplicationRecord
   belongs_to :game
   belongs_to :user, optional: true
+  has_many :kills, dependent: :destroy
 
   INITIALIZED = "initialized"
   IN_GAME = "in_game"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_12_220147) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_12_220354) do
   create_table "games", force: :cascade do |t|
     t.string "status", null: false
     t.string "game_type", null: false
@@ -21,8 +21,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_220147) do
     t.index ["user_id"], name: "index_games_on_user_id"
   end
 
+  create_table "kills", force: :cascade do |t|
+    t.integer "target_code", null: false
+    t.boolean "executed", default: false
+    t.datetime "finish_at"
+    t.integer "player_id", null: false
+    t.integer "mission_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mission_id"], name: "index_kills_on_mission_id"
+    t.index ["player_id"], name: "index_kills_on_player_id"
+  end
+
   create_table "missions", force: :cascade do |t|
-    t.string "description"
+    t.string "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -61,6 +73,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_220147) do
   end
 
   add_foreign_key "games", "users"
+  add_foreign_key "kills", "missions"
+  add_foreign_key "kills", "players"
   add_foreign_key "players", "games"
   add_foreign_key "players", "users"
 end
