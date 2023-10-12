@@ -10,7 +10,49 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_12_200535) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_12_220354) do
+  create_table "games", force: :cascade do |t|
+    t.string "status", null: false
+    t.string "game_type", null: false
+    t.string "name", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_games_on_user_id"
+  end
+
+  create_table "kills", force: :cascade do |t|
+    t.integer "target_code", null: false
+    t.boolean "executed", default: false
+    t.datetime "finish_at"
+    t.integer "player_id", null: false
+    t.integer "mission_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mission_id"], name: "index_kills_on_mission_id"
+    t.index ["player_id"], name: "index_kills_on_player_id"
+  end
+
+  create_table "missions", force: :cascade do |t|
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.integer "player_code"
+    t.string "status", null: false
+    t.string "player_type", null: false
+    t.integer "game_id", null: false
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_players_on_game_id"
+    t.index ["user_id"], name: "index_players_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -30,4 +72,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_200535) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "games", "users"
+  add_foreign_key "kills", "missions"
+  add_foreign_key "kills", "players"
+  add_foreign_key "players", "games"
+  add_foreign_key "players", "users"
 end
